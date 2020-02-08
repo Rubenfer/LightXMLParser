@@ -1,5 +1,9 @@
 import Foundation
 
+public enum ParseError: Error {
+    case unexpectedError
+}
+
 public class XML {
     
     public var name: String
@@ -22,10 +26,11 @@ public class XML {
         self.addAttributes(attributes)
     }
     
-    public convenience init(data: Data) {
+    public convenience init(data: Data) throws {
         let parser = LightXMLParser(data: data)
         parser.parse()
-        self.init(xml: parser.root!)
+        guard let xml = parser.root else { throw ParseError.unexpectedError }
+        self.init(xml: xml)
     }
     
     func addAttribute(name: String, value: Any) {

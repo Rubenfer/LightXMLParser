@@ -13,16 +13,18 @@ final class LightXMLParserTests: XCTestCase {
     func test() {
         
         let xmlData = exampleXML.data(using: .utf8)!
-        let xml = XML(data: xmlData)
+        let xml = try? XML(data: xmlData)
         
-        XCTAssert(xml.name == "xml")
-        XCTAssert(xml.children.count == 2)
+        XCTAssertNotNil(xml)
         
-        let firstChildren = xml.children[0]
+        XCTAssert(xml!.name == "xml")
+        XCTAssert(xml!.children.count == 2)
+        
+        let firstChildren = xml!.children[0]
         XCTAssert(firstChildren.name == "A")
         XCTAssert(firstChildren.value == "TEST")
         
-        let secondChildren = xml.children[1]
+        let secondChildren = xml!.children[1]
         XCTAssert(secondChildren.attributes.count == 2)
         XCTAssert(secondChildren.attributes["attr1"] == "1")
         XCTAssert(secondChildren.attributes["attr2"] == "2")
